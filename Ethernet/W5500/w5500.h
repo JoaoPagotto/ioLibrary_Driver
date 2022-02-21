@@ -48,6 +48,21 @@
 #ifndef  _W5500_H_
 #define  _W5500_H_
 
+//-----------------------------------------------------------------------------
+
+#if defined(__XC8)
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wconversion"
+    #pragma GCC diagnostic ignored "-Wsign-conversion"
+    #pragma GCC diagnostic ignored "-Wempty-body"
+
+    #pragma warning disable 520
+    #pragma warning disable 759
+    #pragma warning disable 1498
+#endif
+
+//-----------------------------------------------------------------------------
+
 #ifdef __cplusplus
 extern "C" {
 #endif
