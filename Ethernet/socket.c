@@ -277,21 +277,27 @@ int8_t connect(uint8_t sn, uint8_t * addr, uint16_t port)
 	setSn_CR(sn,Sn_CR_CONNECT);
    while(getSn_CR(sn));
    if(sock_io_mode & (1<<sn)) return SOCK_BUSY;
-   while(getSn_SR(sn) != SOCK_ESTABLISHED)
-   {
-		if (getSn_IR(sn) & Sn_IR_TIMEOUT)
-		{
-			setSn_IR(sn, Sn_IR_TIMEOUT);
-            return SOCKERR_TIMEOUT;
-		}
-
-		if (getSn_SR(sn) == SOCK_CLOSED)
-		{
-			return SOCKERR_SOCKCLOSED;
-		}
-	}
-   
+  
    return SOCK_OK;
+}
+
+int8_t is_connected(uint8_t sn)
+{
+   if ( getSn_SR(sn) == SOCK_ESTABLISHED )
+      return SOCK_OK;
+   
+   if (getSn_IR(sn) & Sn_IR_TIMEOUT)
+   {
+      setSn_IR(sn, Sn_IR_TIMEOUT);
+      return SOCKERR_TIMEOUT;
+   }
+
+   if (getSn_SR(sn) == SOCK_CLOSED)
+   {
+      return SOCKERR_SOCKCLOSED;
+   }    
+      
+   return SOCK_BUSY;
 }
 
 int8_t disconnect(uint8_t sn)
